@@ -1,0 +1,68 @@
+<html>
+<head>
+<style type="text/css">
+#box{
+	width: 100px;
+	height: 100px;
+	border: 1px solid red
+}
+#box1{
+	width: 100px;
+	height: 100px;
+	border: 1px solid red
+}
+#box2{
+	width: 100px;
+	height: 100px;
+	border: 1px solid red
+}
+
+</style>
+</head>
+<body>
+<table id="tb">
+	<tbody></tbody>
+</table>
+<div id="box"></div>
+<div id="box1"></div>
+<div id="box2"></div>
+
+<script type="text/javascript">
+
+	function getRandomColor() {
+	  var letters = '0123456789ABCDEF';
+	  var color = '#';
+	  for (var i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	  }
+	  return color;
+	}
+	var a = document.getElementById("box");
+	var b = document.getElementById("box1");
+	var c = document.getElementById("box2");
+	
+	document.addEventListener("DOMContentLoaded", function(){
+		setTimeout(function(){
+			for(var i = 0; i < 2000; i++){
+				//arr.push(i);
+				(function(left){
+					setTimeout(function(){
+						a.setAttribute("style", "background-color:"+getRandomColor() +"; margin-left: " + left + "px;");
+					}, i*1)
+				})(i/2);
+				(function(left){
+					setTimeout(function(){
+						b.setAttribute("style", "background-color:"+getRandomColor() +"; margin-left: " + left + "px;");
+					}, i*1)
+				})(i/3);
+				(function(left){
+					setTimeout(function(){
+						c.setAttribute("style", "background-color:"+getRandomColor() +"; margin-left: " + left + "px;");
+					}, i*1)
+				})(i/4);
+			}
+		}, 1000);
+	});
+</script>
+</body>
+</html>
