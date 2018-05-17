@@ -193,16 +193,18 @@
 				elmProp.removeAttribute = function(name){
 					ve = this.__getVE();
 					removeAttr.call(ve, name);
-					if(name == "style")
+					if(name == "style" || name == "class" || name == "name" || name == "id" || name == "height" || name == "width" || name == "rows" || name == "cols")
 						ve.__changeStyle = true;
+					
 					if(sq.indexOf(this) < 0) sq.push(this);
 				}
 				
 				elmProp.setAttribute = function(name, value){
 					ve = this.__getVE();
 					setAttr.call(ve, name, value);
-					if(name == "style")
+					if(name == "style" || name == "class" || name == "name" || name == "id" || name == "height" || name == "width" || name == "rows" || name == "cols")
 						ve.__changeStyle = true;
+					
 					if(sq.indexOf(this) < 0) sq.push(this);
 				}
 				
