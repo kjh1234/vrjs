@@ -44,6 +44,7 @@
 		var cssText, getProp, setProp, removeProp, getComputedStyle = win.getComputedStyle;
 		var elmProp = HTMLElement.prototype;
 		var styleProp = CSSStyleDeclaration.prototype;
+		var CSS_RULES;
 
 		
 		
@@ -150,6 +151,15 @@
 				setProp = styleProp.setProperty;
 				removeProp = styleProp.removeProperty;
 				
+				if(!CSS_RULES){
+					var rootStyle = getComputedStyle(document.firstElementChild || document.lastChild);
+					CSS_RULES = new Array(rootStyle.length);
+					for(var i = 0; i < rootStyle.length; i++){
+						CSS_RULES[i] = rootStyle[i];
+					}
+				}
+				
+				
 				win.getComputedStyle = function(elm, option){
 					elm.__getVE();
 					getComputedStyle(elm, option);
@@ -157,15 +167,9 @@
 				
 				var initVE = function(elm){
 					if(!elm.__VE){
-						var tagName = elm.tagName.toUpperCase();
-						ve = elm.__VE = document.createElement(tagName);
-						
+						ve = elm.__VE = elm.cloneNode();
 						ve.__version = version;
 						ve.__changeStyle = false;
-						var attributes = elm.attributes;
-						for(var i = 0 ; i < attributes.length; i++){
-							setAttr.call(ve, attributes[i].name, attributes[i].value);
-						}
 						
 					}
 				}
@@ -212,8 +216,8 @@
 					get: function(){
 						if(!style.get.call(this).__elm)
 							style.get.call(this).__elm = this;
-							
-						return style.get.call(this);
+									
+						return style.get.call(this.__getVE());
 					},
 					set: function(value){
 						style.set.call(this.__getVE(), value);
@@ -224,7 +228,7 @@
 				
 				Object.defineProperty(styleProp, 'cssText', {
 					get: function(){
-						return cssText.get.call(this);
+						return cssText.get.call(this.__elm.__getVE().style);
 					},
 					set: function(value){
 						ve = this.__elm.__getVE()
