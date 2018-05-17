@@ -158,16 +158,8 @@
 				var initVE = function(elm){
 					if(!elm.__VE){
 						var tagName = elm.tagName.toUpperCase();
-						var html;
+						ve = elm.__VE = document.createElement(tagName);
 						
-						if(tagName == "TD" || tagName == "TH"){
-							html = "<table><tr><"+ tagName+"/></tr></table>";
-						}else if(tagName == "TR" || tagName == "THEAD" || tagName == "TBODY" || tagName == "TFOOT"){
-							html = "<table><"+ tagName+"/></table>";
-						}else {
-							html = "<"+ tagName+"/>";
-						}
-						ve = elm.__VE = parser.parseFromString(html, "text/html").getElementsByTagName(tagName)[0];
 						ve.__version = version;
 						ve.__changeStyle = false;
 						var attributes = elm.attributes;
