@@ -106,9 +106,7 @@
 		
 		function callback(deadline) {
 			oldTime = Date.now();
-			if(isRun)
-				window.requestAnimationFrame(ani);
-			else
+			if(!isRun)
 				clearQueue();
 			
 			var elm;
@@ -122,10 +120,15 @@
 			}
 		}
 		function ani(timestamp){
-			if(isRun) 
-				window.requestIdleCallback(callback, { timeout: 6 });
-			else
+			if(isRun){
+				window.requestAnimationFrame(jobQueue.run);
+				window.requestAnimationFrame(ani);
+				window.requestIdleCallback(callback, { timeout: 3 });
+				//window.requestIdleCallback(jobQueue.run, { timeout: 3 });
+				
+			}else{
 				clearQueue();
+			}
 				
 			
 			if(oldRun) oldRun.stop();
