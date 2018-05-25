@@ -113,7 +113,7 @@
 			if(!deadline.didTimeout) {
 				while((Date.now() - oldTime) < 5){
 					if(elm = asq.shift())
-						syncAttributes(elm);
+						syncAttributes(elm.__getVE(), elm);
 					else
 						break;
 				}
