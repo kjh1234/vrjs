@@ -112,6 +112,8 @@
 		    var cAttrs = currunt.attributes;
 		    var tAttrs = target.attributes;
 		    var dummy = {};
+			
+			delete kh[target.__key];
 
 		    for(var i = 0 ; i < tAttrs.length ;i++){
 			if(!cAttrs.hasOwnProperty(tAttrs[i].name)){
