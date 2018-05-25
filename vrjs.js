@@ -33,6 +33,7 @@
 (function(win){		
 	var parser=new DOMParser();
 	var ve;
+	var keyIndex = 0;
 
 	var sq = win.SyncQueue = new Array();
 	var asq = win.ASyncQueue = new Array();
