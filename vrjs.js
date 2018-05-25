@@ -109,20 +109,20 @@
 		}
 	
 		function syncAttributes(currunt, target){
-			var cAttrs = getAttrNames.call(currunt);
-			var tAttrs = getAttrNames.call(target);
-			
-			delete kh[target.__key];
-			for(var index in tAttrs){
-				if(!currunt.hasAttribute(tAttrs[index])){
-					removeAttr.call(target, tAttrs[index]);
-				}
+		    var cAttrs = currunt.attributes;
+		    var tAttrs = target.attributes;
+		    var dummy = {};
+
+		    for(var i = 0 ; i < tAttrs.length ;i++){
+			if(!cAttrs.hasOwnProperty(tAttrs[i].name)){
+			    tAttrs.removeNamedItem(tAttrs[i].name);
 			}
-			for(var index in cAttrs){
-				if(getAttr.call(target, cAttrs[index]) != getAttr.call(currunt, cAttrs[index])){
-					setAttr.call(target, cAttrs[index], getAttr.call(currunt, cAttrs[index]));
-				}
+		    }
+		    for(var i = 0 ; i < cAttrs.length ;i++){
+			if((tAttrs.getNamedItem(cAttrs[i].name)||dummy).value != (cAttrs.getNamedItem(cAttrs[i].name)||dummy).value){
+			    tAttrs.setNamedItem(cAttrs[i].cloneNode());
 			}
+		    }
 		}
 		
 		function clearQueue(){
