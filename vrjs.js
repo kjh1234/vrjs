@@ -122,7 +122,7 @@
 		}
 		function ani(timestamp){
 			if(isRun){
-				window.requestAnimationFrame(jobQueue.run);
+				//window.requestAnimationFrame(jobQueue.run);
 				window.requestAnimationFrame(ani);
 				window.requestIdleCallback(callback, { timeout: 3 });
 				//window.requestIdleCallback(jobQueue.run, { timeout: 3 });
@@ -172,8 +172,10 @@
 				var initVE = function(elm){
 					if(!elm.__VE){
 						elm.__key = ++keyIndex;
-						//ve = elm.__VE = elm.cloneNode();
-						ve = elm.__VE = new ElementAttribute();
+						ve = elm.__VE = elm.cloneNode();
+						//ve = elm.__VE = new ElementAttribute();
+						ve.__style = style.get.call(ve);
+						ve.__style.__elm = ve;
 						ve.__version = undefined;
 						ve.__changeStyle = false;
 						ve.__original = elm;	//	win.getComputedStyle로 리턴했을 경우 가상D
@@ -190,13 +192,13 @@
 					
 					if(this.__VE.__version != version){
 						this.__VE.__version = version;
-						syncUnAttributes(this, this.__VE);
+						syncAttributes(this, this.__getVE());
 					}
 					
 					return this.__VE;
 				}
 				
-				elmProp.getAttribute = function(name){
+				elmProp.getAttribute = function(namea){
 					return getAttr.call(this.__getVE(), name);
 				}
 				elmProp.getAttributeNames = function(){
@@ -237,35 +239,36 @@
 				
 				Object.defineProperty(styleProp, 'cssText', {
 					get: function(){
-						return cssText.get.call(this.__elm.__getVE().style);
+						return cssText.get.call(this.__elm.__getVE().__style);
 					},
 					set: function(value){
 						ve = this.__elm.__getVE()
-						cssText.call(ve._style, value);
+						cssText.set.call(ve.__style, value);
 						ve.__changeStyle = true;
-						if(sq.indexOf(this.__elm) < 0) sq.push(this.__elm);
+						if(sq.indexOf(ve.__original) < 0) sq.push(ve.__original);
 					}
 				});
 				
 				styleProp.getPropertyValue = function(name){
-					getProp.call(this.__elm.__getVE().style, name);
+					getProp.call(this.__elm.__getVE().__style, name);
 				}
 				
 				styleProp.setProperty = function(name, value){
 					ve = this.__elm.__getVE();
-					setProp.call(ve.style, name, value);
+					setProp.call(ve.__style, name, value);
 					ve.__changeStyle = true;
-					if(sq.indexOf(this.__elm) < 0) sq.push(this.__elm);
+					if(sq.indexOf(ve.__original) < 0) sq.push(ve.__original);
 				}
 				
 				styleProp.removeProperty = function(name){
 					ve = this.__elm.__getVE();
-					removeProp.call(ve.style, name);
+					removeProp.call(ve.__style, name);
 					ve.__changeStyle = true;
-					if(sq.indexOf(this.__elm) < 0) sq.push(this.__elm);
+					if(sq.indexOf(ve.__original) < 0) sq.push(ve.__original);
 				}
 				
-				window.requestIdleCallback(callback, { timeout: 6 });
+				//window.requestIdleCallback(callback, { timeout: 6 });
+				window.requestAnimationFrame(ani);
 				
 			},
 			
