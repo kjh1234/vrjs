@@ -170,21 +170,26 @@
 				
 				var initVE = function(elm){
 					if(!elm.__VE){
-						ve = elm.__VE = elm.cloneNode();
-						ve.__version = version;
+						elm.__key = ++keyIndex;
+						//ve = elm.__VE = elm.cloneNode();
+						ve = elm.__VE = new ElementAttribute();
+						ve.__version = undefined;
 						ve.__changeStyle = false;
+						ve.__original = elm;	//	win.getComputedStyle로 리턴했을 경우 가상D
 						
 					}
 				}
 
-				
 				elmProp.__getVE = function(){
+					if(this.__original)
+						return this;
+					
 					if(!this.__VE)
 						initVE(this);
 					
 					if(this.__VE.__version != version){
 						this.__VE.__version = version;
-						syncAttributes(this, this.__VE);
+						syncUnAttributes(this, this.__VE);
 					}
 					
 					return this.__VE;
